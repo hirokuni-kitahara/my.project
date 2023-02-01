@@ -1,0 +1,29 @@
+- hosts: "localhost"
+  tasks:
+    - name: "Use role-a to set vars"
+      include_role:
+        name: role-a
+    
+    - name: "Use external role"
+      include_role:
+        name: geerlingguy.gitlab
+
+    - name: "Add an apt repository"
+      # apt_repo is unresolved module --> ARI detects unresolved module
+      apt_repo:
+        repo: "sample-repo"
+        state: present
+      vars:
+        var2: "task_vars_value2"
+        var4: "task_vars_value4"
+
+    - name: "Install package"
+      ansible.builtin.apt:
+        # these variables are undefined --> ARI detects undefined vars
+        name: "{{ apt_package_name }}:{{ apt_package_version}}"
+        state: present
+
+    - name: "Configure firewall"
+      community.general.ufw2:
+        hoge: "fuga"
+        state: present

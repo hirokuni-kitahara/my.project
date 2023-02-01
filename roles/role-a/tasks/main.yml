@@ -1,0 +1,3 @@
+- name: "set_fact"
+  set_fact:
+    var3: "set_fact_value3"
